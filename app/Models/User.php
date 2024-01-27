@@ -44,7 +44,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function celulas() :HasMany {
-        return $this->hasMany(Celula::class);
+    public function posts() :HasMany {
+        return $this->hasMany(Post::class);
     }
 }

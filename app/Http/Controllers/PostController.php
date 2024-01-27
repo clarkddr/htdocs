@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Celula;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
-class CelulaController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        return view('celulas.index');
+
+
+
+    public function index(){
+        $data = [
+            'messages' => Post::with('user')->latest()->get()
+            //'messages' => Post::orderBy('created_at','desc')->get()
+        ];
+
+        return view('posts.index',$data);
     }
 
     /**
@@ -28,7 +35,7 @@ class CelulaController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'message' => ['required','max:255']
         ]);
 
@@ -38,15 +45,15 @@ class CelulaController extends Controller
             'user_id' => auth()->id(),
         ]);
 */      
-        auth()->user()->celulas()->create(['message' => $request->get('message')]);
+        $request->user()->posts()->create($validated);
         session()->flash('status','Mensaje agregado!!');
-        return to_route('celulas.index');
+        return to_route('posts.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Celula $celula)
+    public function show(Post $post)
     {
         //
     }
@@ -54,7 +61,7 @@ class CelulaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Celula $celula)
+    public function edit(Post $post)
     {
         //
     }
@@ -62,7 +69,7 @@ class CelulaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Celula $celula)
+    public function update(Request $request, Post $post)
     {
         //
     }
@@ -70,7 +77,7 @@ class CelulaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Celula $celula)
+    public function destroy(Post $post)
     {
         //
     }

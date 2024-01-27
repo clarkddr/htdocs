@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CelulaController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+/* Este es una funcion que nos ayuda a ver cuales consultas se estan ejecutando en la visa. */
+// DB::listen(function ($query) {
+//     dump($query->sql);
+// });
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,8 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    Route::get('/celulas',[CelulaController::class, 'index'])->name('celulas.index');
-    Route::post('/celulas',[CelulaController::class, 'store'])->name('celulas.store');
+    Route::get('/posts',[PostController::class, 'index'])->name('posts.index');
+    Route::post('/posts',[PostController::class, 'store'])->name('posts.store');
 });
 
 require __DIR__.'/auth.php';
