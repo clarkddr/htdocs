@@ -61,24 +61,29 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
-    {
-        //
+    public function edit(Post $post){
+        $this->authorize('update',$post);
+        return view('posts.edit',['post' => $post]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
-    {
-        //
+    public function update(Request $request, Post $post){
+        $this->authorize('update',$post);
+        $validated = $request->validate([
+            'message' => ['required','max:255']
+        ]);        
+        $post->update($validated);        
+        return to_route('posts.index')->with('status','Mensaje actualizado!!');        
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
-    {
-        //
+    public function destroy(Post $post){
+        $this->authorize('delete',$post);
+        $post->delete();
+        return to_route('posts.index')->with('status','Mensaje Eliminado');
     }
 }

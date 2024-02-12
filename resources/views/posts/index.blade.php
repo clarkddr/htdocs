@@ -32,10 +32,20 @@
                             <div>
                                 <span class="text-gray-800 dark:text-gray-200">{{$msg->user->name}}</span>
                                 <small class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ $msg->created_at->diffForHumans() }}</small>
+                                @if($msg->updated_at->eq($msg->created_at))                                    
+                                <small class="text-sm text-gray-600 dark:text-gray-400"> &middot; {{ 'Editado' }}</small>
+                                @endif    
                             </div>                                
                         </div>
-                        <p class="mt-4 text-lg text-gray-900 dark:text-gray-100">{{$msg->message}}</p>                        
+                        <p class="mt-4 text-lg text-gray-900 dark:text-gray-100">{{$msg->message}}</p>
                     </div>
+                    @can ('update',$msg)
+                    <a href="{{route('posts.edit',$msg)}}" class="ml-2 text-sm text-green-600 dark:text-green-400" >Editar</a>
+                    <form method="POST" action="{{ route('posts.destroy',$msg)}} ">
+                        @csrf @method('delete')
+                        <a href="{{route('posts.destroy',$msg)}}" class="ml-2 text-sm text-red-600 dark:text-red-400" onclick="event.preventDefault(); this.closest('form').submit()">Eliminar</a>
+                    </form>
+                    @endcan
                 </div>
                 @endforeach
             </div>
